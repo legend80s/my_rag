@@ -67,9 +67,9 @@ assert len(docs) == 1
 
 print(f"Total characters: {len(docs[0].page_content)}")
 
-print("500 START")
-print(docs[0].page_content[:500])
-print("500 END")
+# print("500 START")
+# print(docs[0].page_content[:500])
+# print("500 END")
 
 text_splitter = RecursiveCharacterTextSplitter(
     chunk_size=1000,
