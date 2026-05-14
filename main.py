@@ -1,20 +1,17 @@
 # https://docs.langchain.com/oss/python/langchain/rag#ollama
-import os
-from dotenv import load_dotenv
-
 import bs4
-from langchain.agents import AgentState, create_agent
+from dotenv import load_dotenv
+from langchain.agents import create_agent
+
+# from langchain_ollama import OllamaEmbeddings
+from langchain.tools import tool
 from langchain_community.document_loaders import WebBaseLoader
-from langchain.messages import MessageLikeRepresentation
-from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_core.embeddings import DeterministicFakeEmbedding
 
 # from langchain.chat_models import init_chat_model
 from langchain_core.vectorstores import InMemoryVectorStore
 from langchain_deepseek import ChatDeepSeek
-
-# from langchain_ollama import OllamaEmbeddings
-from langchain.tools import tool
-from langchain_core.embeddings import DeterministicFakeEmbedding
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 embeddings = DeterministicFakeEmbedding(size=4096)
 # embeddings = OllamaEmbeddings(model="llama3")
@@ -85,10 +82,20 @@ prompt = (
 )
 
 
+# model = ChatDeepSeek(
+#     # deepseek-chat (将于 2026/07/24 弃用) https://api-docs.deepseek.com/zh-cn/
+#     # openai.BadRequestError: Error code: 400 - {'error': {'message': 'The `reasoning_content` in the thinking mode must be passed back to the API.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_request_error'}}
+#     model="deepseek-chat",
+# )
+
+
 model = ChatDeepSeek(
-    # model="deepseek-v4-flash",
-    model="deepseek-chat",  # openai.BadRequestError: Error code: 400 - {'error': {'message': 'The `reasoning_content` in the thinking mode must be passed back to the API.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_request_error'}}
-    # extra_body={"reasoning": False},  # 关闭思考模式
+    model="deepseek-v4-flash",
+    extra_body={
+        # (1) 默认思考开关为 enabled
+        # 关闭思考模式 解决 `reasoning_content`
+        "thinking": {"type": "disabled"}
+    },
 )
 
 agent = create_agent(model, tools, system_prompt=prompt)
