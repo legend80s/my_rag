@@ -87,8 +87,8 @@ prompt = (
 
 model = ChatDeepSeek(
     # model="deepseek-v4-flash",
-    model="deepseek-chat",
-    extra_body={"reasoning": False},  # 关闭思考模式
+    model="deepseek-chat",  # openai.BadRequestError: Error code: 400 - {'error': {'message': 'The `reasoning_content` in the thinking mode must be passed back to the API.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_request_error'}}
+    # extra_body={"reasoning": False},  # 关闭思考模式
 )
 
 agent = create_agent(model, tools, system_prompt=prompt)
