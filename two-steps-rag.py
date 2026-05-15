@@ -18,6 +18,7 @@ from langchain_community.document_loaders import (
     # PyPDFLoader,
     # Docx2txtLoader,
 )
+from test_dashscope_embedding_mode import dashscope_embeddings
 
 # 指定加载文档的目录
 LOAD_PATH = "./assets"
@@ -27,11 +28,13 @@ LOAD_PATH = "./assets"
 # 来源：稀土掘金
 # 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
-embeddings = DeterministicFakeEmbedding(size=4096)
+# embeddings = DeterministicFakeEmbedding(size=4096)
 # embeddings = OllamaEmbeddings(model="llama3")
 # embeddings = DeterministicFakeEmbedding(size=4096)
 
-vector_store = InMemoryVectorStore(embeddings)
+embedding = dashscope_embeddings
+
+vector_store = InMemoryVectorStore(dashscope_embeddings)
 
 # 加载 .env 文件
 load_dotenv()
