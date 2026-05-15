@@ -18,7 +18,7 @@ from langchain_community.document_loaders import (
     # PyPDFLoader,
     # Docx2txtLoader,
 )
-from test_dashscope_embedding_mode import dashscope_embeddings
+from dashscope_embedding_mode import dashscope_embeddings
 
 # 指定加载文档的目录
 LOAD_PATH = "./assets"
@@ -125,8 +125,8 @@ model = ChatDeepSeek(
 
 agent = create_agent(model, tools=[], middleware=[prompt_with_context])
 
-
-query = "前端框架技术选择，如果是移动端，应该考虑什么，以及优先选择哪些框架？"
+query = '解释 task decomposition'
+# query = "前端框架技术选择，如果是移动端，应该考虑什么，以及优先选择哪些框架？"
 # query = "什么是 Marko？"
 # for chunk in agent.stream(
 #     {"messages": [{"role": "user", "content": query}]},

@@ -10,7 +10,8 @@ load_dotenv()
 
 # 初始化嵌入模型
 dashscope_embeddings = DashScopeEmbeddings(
-    model="text-embedding-v2",  # 或 "text-embedding-v2"，推荐 v3
+   model="text-embedding-v3",  # 或 "text-embedding-v2"，推荐 v3
+    # model="text-embedding-v2",  # 或 "text-embedding-v2"，推荐 v3
 )
 
 # 直接使用
