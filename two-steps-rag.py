@@ -1,4 +1,6 @@
 # https://docs.langchain.com/oss/python/langchain/rag#ollama
+import asyncio
+from langchain.messages import AIMessageChunk
 from dotenv import load_dotenv
 from langchain.agents import create_agent
 
@@ -103,7 +105,7 @@ def prompt_with_context(request: ModelRequest) -> str:
         f"\n\n<context>{docs_content}</context>"
     )
 
-    print(f"{system_message=}")
+    # print(f"{system_message=}")
 
     return system_message
 
@@ -123,8 +125,26 @@ agent = create_agent(model, tools=[], middleware=[prompt_with_context])
 
 query = "前端框架技术选择，如果是移动端，应该考虑什么，以及优先选择哪些框架？"
 # query = "什么是 Marko？"
-for step in agent.stream(
-    {"messages": [{"role": "user", "content": query}]},
-    stream_mode="values",
-):
-    step["messages"][-1].pretty_print()
+# for chunk in agent.stream(
+#     {"messages": [{"role": "user", "content": query}]},
+#     stream_mode=["messages"],
+#     version="v2",
+# ):
+#     if chunk["type"] == "messages":
+#         token, metadata = chunk["data"]
+#         if isinstance(token, AIMessageChunk):
+#             if token.text:
+#                 print(token.text, end="|")
+
+
+async def astream():
+    async for token, _ in agent.astream(
+        {"messages": [{"role": "user", "content": query}]},
+        stream_mode="messages",
+    ):
+        if isinstance(token, AIMessageChunk):
+            if token.text:
+                print(token.text, end="", flush=True)
+
+
+asyncio.run(astream())
